@@ -48,15 +48,17 @@ check-pdk:
 	fi
 
 .PHONY: install
-install: check-pdk setup rtk_lef_generate captable_generate
+install: check-pdk setup openPDK_import captable_generate db_generate
 
-rtk_lef_generate: check-pdk setup  
-	cd work && python3 $(SETUP_DIR)/generate_rtk_lef.py
+openPDK_import:
+	cd work && python3 $(SETUP_DIR)/openPDK_import.py
+	cd work && python3 $(SETUP_DIR)/fix_rtk_lef_1.py
+	cd work && python3 $(SETUP_DIR)/fix_verilog.py
 
-captable_generate: check-pdk setup rtk_lef_generate
+captable_generate: check-pdk setup
 	cd work && python3 $(SETUP_DIR)/generate_captable.py
 # after captable generation the LEF can be further fixed
-	cd work && python3 $(SETUP_DIR)/fix_rtk_LEF.py
+	cd work && python3 $(SETUP_DIR)/fix_rtk_lef_2.py
 
 lib_generate:
 	cd work && python3 $(SETUP_DIR)/generate_lib.py

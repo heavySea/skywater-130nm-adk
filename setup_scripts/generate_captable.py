@@ -9,7 +9,7 @@ import subprocess
 if os.path.exists(PDK_CAPTABLES_PATH + '/skywater.nominal.captable'):
 	print("Found captable files.")
 	# copy generated captables
-	copyfile(PDK_CAPTABLES_PATH + '/skywater.nominal.captable', VIEW_STANDARD_PATH + '/rtk-typical.captable')
+	copyfile(PDK_CAPTABLES_PATH + '/skywater.nominal.captable', VIEW_STANDARD_PATH + "/rtk-typical.captable")
 else:
 	print("Captables not found. Generate Captables using Innovus.")
 	# Check if Cadence Innovus can be executed

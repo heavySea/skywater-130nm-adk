@@ -1,10 +1,11 @@
 import os
 
 SKYWATER130_HOME = os.environ.get('PDK_ROOT') + '/skywater-pdk'
-SKYWATER130A = os.environ.get('PDK_ROOT') + '/syk130A'
+SKYWATER130A = os.environ.get('PDK_ROOT') + '/sky130A'
 
 VIEW_STANDARD_PATH = os.environ.get('VIEW_STANDARD_DIR')
 ADK_ROOT = os.environ.get('ADK_ROOT')
+WORK_PATH = ADK_ROOT + "/work"
 
 # As long as https://github.com/google/skywater-pdk/pull/185 is pending the vendor files are 
 # checked out independently
