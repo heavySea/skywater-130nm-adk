@@ -22,14 +22,14 @@ def fix_pg_type_for_pg_pin(text, pg_pin, pg_type, orig_pg_type=r'\w+'):
     return re.sub(find, replace, text)
 
 def fix_related_pin_for_pg_pin(text, pg_pin, related_pin, new_pin):
-    find    = r'(pg_pin \(\"' + pg_pin + r'\"\) \{\s*\n.*\n\s+' + related_pin + r' : \")\w+(\";)\n'
-    replace = r'\1' + new_pin + r'\2' + '\n'
-    return re.sub(find, replace, text, re.DOTALL)
+    find    = r'(pg_pin \(\"' + pg_pin + r'\"\) \{\s*\n(.|\n)*?\s+' + related_pin + r' : \")\w+(\";)\n'
+    replace = r'\1' + new_pin + r'\3' + '\n'
+    return re.sub(find, replace, text)
 
 def fix_related_pin_for_pin(text, pg_pin, related_pin, new_pin):
     find    = r'(pin \(\"' + pg_pin + r'\"\) \{\s*\n(\s*\w+ : \"\w+";\n){1,4}\s+' + related_pin + r' : \")\w+(\";)\n'
     replace = r'\1' + new_pin + r'\3' + '\n'
-    return re.sub(find, replace, text, re.DOTALL)
+    return re.sub(find, replace, text)
 
 def fix_missing_pg_pin(text, cell_name, pg_pin, attributes, insert_after_pg_pin=None):
     find    = r'(cell \(\"' + cell_name + r'.*\"\) \{\s*\n)'

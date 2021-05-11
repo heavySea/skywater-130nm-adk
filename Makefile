@@ -58,8 +58,11 @@ captable_generate: check-pdk setup rtk_lef_generate
 # after captable generation the LEF can be further fixed
 	cd work && python3 $(SETUP_DIR)/fix_rtk_LEF.py
 
-generate_lib:
+lib_generate:
 	cd work && python3 $(SETUP_DIR)/generate_lib.py
+
+db_generate: lib_generate
+	cd work && python3 $(SETUP_DIR)/generate_db.py
 
 # This is only required as long https://github.com/google/skywater-pdk/pull/185 is pending!
 .PHONY: sparse_checkout_synopsys_files
