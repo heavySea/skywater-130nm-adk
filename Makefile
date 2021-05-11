@@ -24,16 +24,20 @@ SKY130A:=$(PDK_ROOT)/sky130A
 # Currently the vendor files for Synopsys are still in an PR state
 # Do a sparse checkout to only download the directory containing the vendor files
 # This is mostly required to get the ITF file to generate captables
-SPARSE_CHECKOUT_PDK_FILES_PATH:=$(PDK_ROOT)/SKY130_SYNOPSYS_FILES
+SPARSE_CHECKOUT_PDK_FILES_PATH:=$(PDK_ROOT)/SKY130_VENDOR_FILES
 
 SETUP_DIR:=$(PWD)/setup_scripts
 export VIEW_STANDARD_DIR:=$(PWD)/view-standard
+export ADK_ROOT:=$(PWD)
 
 
 .PHONY: install
-install: check-pdk
-	python3 $(SETUP_DIR)/generate_rtk_lef.py
-
+install: check-pdk  
+# Technology LEF generate
+	test -d work || mkdir work
+	cd work && python3 $(SETUP_DIR)/generate_rtk_lef.py
+	cd work && python3 $(SETUP_DIR)/generate_captable.py
+#rm -rf work
 
 check-pdk:
 	@if [ ! -d "$(PDK_ROOT)" ]; then \
@@ -53,17 +57,15 @@ check-pdk:
 .PHONY: sparse_checkout_synopsys_files
 sparse_checkout_synopsys_files:
 	@if [ ! -d "$(SPARSE_CHECKOUT_PDK_FILES_PATH)" ]; then \
-		mkdir $(SPARSE_CHECKOUT_PDK_FILES_PATH) 
-		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git init && git remote add -f origin https://github.com/20Mhz/skywater-pdk.git
-		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git config core.sparseCheckout true && echo "vendor/synopsys/" >> .git/info/sparse-checkout
-		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git pull origin synopsys_pull
-	# link library folder
-		ln -sf $(SKY_PDK_ROOT)/libraries $(SPARSE_CHECKOUT_PDK_FILES_PATH)/libraries
+		mkdir $(SPARSE_CHECKOUT_PDK_FILES_PATH); \
+		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git init && git remote add -f origin https://github.com/20Mhz/skywater-pdk.git; \
+		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git config core.sparseCheckout true && echo "vendor/synopsys/" >> .git/info/sparse-checkout; \
+		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git pull origin synopsys_pull; \
+		ln -sf $(SKY_PDK_ROOT)/libraries $(SPARSE_CHECKOUT_PDK_FILES_PATH)/libraries; \
 	fi
 
 # Not tested yet. Todo on Monday
-.PHONY: make_synopsys_vendor_files
-make_synopsys_vendor_files: sparse_checkout_synopsys_files
-	$(MAKE) $(SPARSE_CHECKOUT_PDK_FILES_PATH)/vendor/synopsys sky130_fd_sc_hd_db
-	$(MAKE) $(SPARSE_CHECKOUT_PDK_FILES_PATH)/vendor/synopsys sky130_fd_sc_hd_mw
-	$(MAKE) $(SPARSE_CHECKOUT_PDK_FILES_PATH)/vendor/synopsys tluplus
+.PHONY: synopsys_vendor_files
+synopsys_vendor_files: sparse_checkout_synopsys_files
+	cd $(SPARSE_CHECKOUT_PDK_FILES_PATH)/vendor/synopsys && $(MAKE) sky130_fd_sc_hd_db
+	cd $(SPARSE_CHECKOUT_PDK_FILES_PATH)/vendor/synopsys && $(MAKE) sky130_fd_sc_hd_mw
