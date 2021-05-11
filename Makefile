@@ -30,14 +30,8 @@ SETUP_DIR:=$(PWD)/setup_scripts
 export VIEW_STANDARD_DIR:=$(PWD)/view-standard
 export ADK_ROOT:=$(PWD)
 
-
-.PHONY: install
-install: check-pdk  
-# Technology LEF generate
+setup:
 	test -d work || mkdir work
-	cd work && python3 $(SETUP_DIR)/generate_rtk_lef.py
-	cd work && python3 $(SETUP_DIR)/generate_captable.py
-#rm -rf work
 
 check-pdk:
 	@if [ ! -d "$(PDK_ROOT)" ]; then \
@@ -52,6 +46,17 @@ check-pdk:
 		echo "PDK Root: "$(SKY130A)" doesn't exists, please export the correct path to the folder that contains skywater-pdk and SKY130A before running make. "; \
 		exit 1; \
 	fi
+
+.PHONY: install
+install: check-pdk setup rtk_lef_generate captable_generate
+
+rtk_lef_generate: check-pdk setup  
+	cd work && python3 $(SETUP_DIR)/generate_rtk_lef.py
+
+captable_generate: check-pdk setup rtk_lef_generate
+	cd work && python3 $(SETUP_DIR)/generate_captable.py
+# after captable generation the LEF can be further fixed
+	cd work && python3 $(SETUP_DIR)/fix_rtk_LEF.py
 
 # This is only required as long https://github.com/google/skywater-pdk/pull/185 is pending!
 .PHONY: sparse_checkout_synopsys_files
