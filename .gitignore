@@ -15,12 +15,12 @@
 *.spi
 *.v
 work
-view-standard/magicrc
+ADK/view-standard/magicrc
 
-view-standard/netgen-setup.tcl
+ADK/view-standard/netgen-setup.tcl
 
-view-standard/sky130A.tech
+ADK/view-standard/sky130A.tech
 
-view-standard/sky130A_magic.tcl
+ADK/view-standard/sky130A_magic.tcl
 
-view-standard/stdcells.gds
+ADK/view-standard/stdcells.gds
