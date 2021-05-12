@@ -16,7 +16,7 @@ from skywater_path import *
 ################
 
 # copy lef into working directory for later steps
-copyfile(SKYWATER130A + '/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef', WORK_PATH + '/stdcells.lef')
+copyfile(SKYWATER130A + '/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef', WORK_PATH + '/sky130_fd_sc_hd.lef')
 # copy lef into standard view directory
 copyfile(SKYWATER130A + '/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef', VIEW_STANDARD_PATH + '/stdcells.lef')
 
