@@ -14,3 +14,13 @@
 *.cdl
 *.spi
 *.v
+work
+ADK/view-standard/magicrc
+
+ADK/view-standard/netgen-setup.tcl
+
+ADK/view-standard/sky130A.tech
+
+ADK/view-standard/sky130A_magic.tcl
+
+ADK/view-standard/stdcells.gds
