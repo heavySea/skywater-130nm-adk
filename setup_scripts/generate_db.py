@@ -7,11 +7,11 @@ import subprocess
 
 # Check whether the PDK already contains generated captables
 if os.path.exists(PDK_DB_PATH + '/sky130_fd_sc_hd__tt_025C_1v80.db'):
-	print("Found compiled library files.")
+	print("Found compiled library files for Synopsys tools inside the PDK.")
 	# copy generated captables
 	copyfile(PDK_DB_PATH + '/sky130_fd_sc_hd__tt_025C_1v80.db', VIEW_STANDARD_PATH + '/stdcells.db')
 else:
-	print("Compiled library files not found in PDK. Generate compiled libraries using Synopsys Library Compiler.")
+	print("Compiled library files for Synopsys tools not found in the PDK. Generate compiled libraries using Synopsys Library Compiler.")
 	# Check if Cadence Innovus can be executed
 	if which( "lc_shell" ):
 
@@ -31,5 +31,5 @@ else:
 		copyfile('sky130_fd_sc_hd__tt_025C_1v80.db', PDK_DB_PATH + '/sky130_fd_sc_hd__tt_025C_1v80.db')
 
 	else:
-		print("Cant find Synopsys Library Compiler. Library compilation will be skipped!")
+		print("Warning: Cant find Synopsys Library Compiler. Library compilation will be skipped!")
 		sys.exit(0)

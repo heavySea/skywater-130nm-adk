@@ -21,64 +21,59 @@ endif
 SKY_PDK_ROOT:=$(PDK_ROOT)/skywater-pdk
 SKY130A:=$(PDK_ROOT)/sky130A
 
-# Currently the vendor files for Synopsys are still in an PR state
-# Do a sparse checkout to only download the directory containing the vendor files
-# This is mostly required to get the ITF file to generate captables
-SPARSE_CHECKOUT_PDK_FILES_PATH:=$(PDK_ROOT)/SKY130_VENDOR_FILES
 
 SETUP_DIR:=$(PWD)/setup_scripts
-export VIEW_STANDARD_DIR:=$(PWD)/view-standard
 export ADK_ROOT:=$(PWD)
+export VIEW_STANDARD_DIR:=$(ADK_ROOT)/ADK/view-standard
 
 setup:
 	test -d work || mkdir work
 
 check-pdk:
 	@if [ ! -d "$(PDK_ROOT)" ]; then \
-		echo "PDK Root: "$(PDK_ROOT)" doesn't exists, please export the correct path before running make. "; \
+		@echo "PDK Root: "$(PDK_ROOT)" doesn't exists, please export the correct path before running make. "; \
 		exit 1; \
 	fi
 	@if [ ! -d "$(SKY_PDK_ROOT)" ]; then \
-		echo "PDK Root: "$(SKY_PDK_ROOT)" doesn't exists, please export the correct path to the folder that contains skywater-pdk and SKY130A before running make. "; \
+		@echo "PDK Root: "$(SKY_PDK_ROOT)" doesn't exists, please export the correct path to the folder that contains skywater-pdk and SKY130A before running make. "; \
 		exit 1; \
 	fi
 	@if [ ! -d "$(SKY130A)" ]; then \
-		echo "PDK Root: "$(SKY130A)" doesn't exists, please export the correct path to the folder that contains skywater-pdk and SKY130A before running make. "; \
+		@echo "PDK Root: "$(SKY130A)" doesn't exists, please export the correct path to the folder that contains skywater-pdk and SKY130A before running make. "; \
 		exit 1; \
 	fi
 
 .PHONY: install
-install: check-pdk setup openPDK_import captable_generate db_generate
+install: check-pdk setup openPDK_import captable_generate db_generate mw_generate
 
 openPDK_import:
 	cd work && python3 $(SETUP_DIR)/openPDK_import.py
 	cd work && python3 $(SETUP_DIR)/fix_rtk_lef_1.py
+	@echo "\n"
 	cd work && python3 $(SETUP_DIR)/fix_verilog.py
+	@echo "\n"
 
 captable_generate: check-pdk setup
 	cd work && python3 $(SETUP_DIR)/generate_captable.py
+	@echo "\n"
 # after captable generation the LEF can be further fixed
 	cd work && python3 $(SETUP_DIR)/fix_rtk_lef_2.py
+	@echo "\n"
+
 
 lib_generate:
 	cd work && python3 $(SETUP_DIR)/generate_lib.py
+	@echo "\n"
 
 db_generate: lib_generate
 	cd work && python3 $(SETUP_DIR)/generate_db.py
+	@echo "\n"
 
-# This is only required as long https://github.com/google/skywater-pdk/pull/185 is pending!
-.PHONY: sparse_checkout_synopsys_files
-sparse_checkout_synopsys_files:
-	@if [ ! -d "$(SPARSE_CHECKOUT_PDK_FILES_PATH)" ]; then \
-		mkdir $(SPARSE_CHECKOUT_PDK_FILES_PATH); \
-		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git init && git remote add -f origin https://github.com/20Mhz/skywater-pdk.git; \
-		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git config core.sparseCheckout true && echo "vendor/synopsys/" >> .git/info/sparse-checkout; \
-		cd $(SPARSE_CHECKOUT_PDK_FILES_PATH) && git pull origin synopsys_pull; \
-		ln -sf $(SKY_PDK_ROOT)/libraries $(SPARSE_CHECKOUT_PDK_FILES_PATH)/libraries; \
-	fi
+mw_generate:
+	cd work && python3 $(SETUP_DIR)/generate_mw.py
+	@echo "\n"
 
-# Not tested yet. Todo on Monday
-.PHONY: synopsys_vendor_files
-synopsys_vendor_files: sparse_checkout_synopsys_files
-	cd $(SPARSE_CHECKOUT_PDK_FILES_PATH)/vendor/synopsys && $(MAKE) sky130_fd_sc_hd_db
-	cd $(SPARSE_CHECKOUT_PDK_FILES_PATH)/vendor/synopsys && $(MAKE) sky130_fd_sc_hd_mw
+.PHONY: clean
+clean: 
+	@echo "Removing working directory."
+	rm -rf work

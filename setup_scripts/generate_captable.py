@@ -7,15 +7,15 @@ import subprocess
 
 # Check whether the PDK already contains generated captables
 if os.path.exists(PDK_CAPTABLES_PATH + '/skywater.nominal.captable'):
-	print("Found captable files.")
+	print("Found captable files inside the PDK.")
 	# copy generated captables
 	copyfile(PDK_CAPTABLES_PATH + '/skywater.nominal.captable', VIEW_STANDARD_PATH + "/rtk-typical.captable")
 else:
-	print("Captables not found. Generate Captables using Innovus.")
+	print("Captables not found inside the PDK. Generate Captables using Innovus.")
 	# Check if Cadence Innovus can be executed
 	if which( "generateCapTbl" ):
 
-		subprocess.run("generateCapTbl -ict " + ADK_ROOT + "/setup_files/skywater130.nominal.ict -lef " + VIEW_STANDARD_PATH + "/rtk-tech.lef -output rtk-typical.captable", shell=True, check=True)
+		subprocess.run("generateCapTbl -ict " + WORK_PATH + "/skywater130.nominal.ict -lef " + VIEW_STANDARD_PATH + "/rtk-tech.lef -output rtk-typical.captable", shell=True, check=True)
 
 		copyfile('rtk-typical.captable', VIEW_STANDARD_PATH + '/rtk-typical.captable')
 
@@ -30,7 +30,7 @@ else:
 		copyfile('rtk-typical.captable', PDK_CAPTABLES_PATH + '/skywater.nominal.captable')
 
 	else:
-		print("Cant find Cadence Innovus. Captable generation will be skipped!")
+		print("Warning: Cant find Cadence Innovus. Captable generation will be skipped!")
 		sys.exit(0)
 
 
