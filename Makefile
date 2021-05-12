@@ -24,7 +24,7 @@ SKY130A:=$(PDK_ROOT)/sky130A
 
 SETUP_DIR:=$(PWD)/setup_scripts
 export ADK_ROOT:=$(PWD)
-export VIEW_STANDARD_DIR:=$(ADK_ROOT)/ADK/view-standard
+export VIEW_STANDARD_DIR:=$(ADK_ROOT)/skywater-130nm/view-standard
 
 setup:
 	test -d work || mkdir work
