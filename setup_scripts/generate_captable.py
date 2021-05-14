@@ -15,8 +15,12 @@ else:
 	# Check if Cadence Innovus can be executed
 	if which( "generateCapTbl" ):
 
-		subprocess.run("generateCapTbl -ict " + ADK_ROOT + "/setup_scripts/skywater130.nominal.ict -lef " + WORK_PATH + "/rtk-tech.lef -output " + WORK_PATH +"/rtk-typical.captable", shell=True, check=True)
-
+		subprocess.run("generateCapTbl -ict " + ADK_ROOT + "/setup_scripts/skywater130.nominal.ict -lef " + WORK_PATH + "/rtk-tech.lef -output " + WORK_PATH +"/rtk-typical.captable", shell=True)
+	
+		if not os.path.exists('rtk-typical.captable'):
+			print("Captable generation failed!")
+			sys.exit(1)
+			
 		copyfile('rtk-typical.captable', VIEW_STANDARD_PATH + '/rtk-typical.captable')
 
 		# copy result into PDK
