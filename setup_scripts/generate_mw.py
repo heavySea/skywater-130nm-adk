@@ -54,8 +54,9 @@ else:
 				sys.exit(1)
 
 		copyfile('sky130_fd_sc_hd.tf', PDK_MW_PATH + '/sky130_fd_sc_hd.tf')
+		
 		# Overwrite direcotry
-		if os.path.exists(VIEW_STANDARD_PATH + "/stdcells.mwlib"):
+		if os.path.exists(PDK_MW_PATH + "/sky130_fd_sc_hd.mwlib"):
 			rmtree(PDK_MW_PATH + '/sky130_fd_sc_hd.mwlib')
 		copytree('sky130_fd_sc_hd.mwlib', PDK_MW_PATH + '/sky130_fd_sc_hd.mwlib')
 
