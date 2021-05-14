@@ -15,7 +15,7 @@ else:
 	# Check if Cadence Innovus can be executed
 	if which( "generateCapTbl" ):
 
-		subprocess.run("generateCapTbl -ict " + WORK_PATH + "/skywater130.nominal.ict -lef " + VIEW_STANDARD_PATH + "/rtk-tech.lef -output rtk-typical.captable", shell=True, check=True)
+		subprocess.run("generateCapTbl -ict " + ADK_ROOT + "/setup_scripts/skywater130.nominal.ict -lef " + WORK_PATH + "/rtk-tech.lef -output " + WORK_PATH +"/rtk-typical.captable", shell=True, check=True)
 
 		copyfile('rtk-typical.captable', VIEW_STANDARD_PATH + '/rtk-typical.captable')
 
