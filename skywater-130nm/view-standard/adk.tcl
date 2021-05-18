@@ -4,6 +4,9 @@
 # This file is sourced by every asic flow tcl script that uses the
 # ASIC design kit. This allows us to set ADK-specific variables.
 
+# written by Priyanka Raina: 
+# https://code.stanford.edu/ee272/skywater-130nm-adk
+
 #-------------------------------------------------------------------------
 # ADK_PROCESS
 #-------------------------------------------------------------------------
@@ -25,6 +28,8 @@ set ADK_MIN_ROUTING_LAYER_DC met2
 set ADK_MAX_ROUTING_LAYER_DC met5
 
 set ADK_MAX_ROUTING_LAYER_INNOVUS 6
+
+set ADK_BASE_LAYER_IDX 1
 
 #-------------------------------------------------------------------------
 # Power mesh layers
@@ -94,18 +99,20 @@ set ADK_TIE_CELLS \
 # library do not already include taps. The interval is the DRC rule for
 # the required spacing between tap cells.
 
+# source: https://github.com/RTimothyEdwards/open_pdks/blob/master/sky130/openlane/sky130_fd_sc_hd/config.tcl#L29
 set ADK_WELL_TAP_CELL "sky130_fd_sc_hd__tapvpwrvgnd_1"
 
-set ADK_WELL_TAP_INTERVAL 120
-# FIXME
+# source: https://github.com/RTimothyEdwards/open_pdks/blob/master/sky130/openlane/config.tcl#L70
+set ADK_WELL_TAP_INTERVAL 13
+
 
 #-------------------------------------------------------------------------
 # ADK_END_CAP_CELL
 #-------------------------------------------------------------------------
 # This list should specify the end cap cells if the library requires them.
 
-set ADK_END_CAP_CELL ""
-# FIXME
+# source: https://github.com/RTimothyEdwards/open_pdks/blob/master/sky130/openlane/sky130_fd_sc_hd/config.tcl#L30
+set ADK_END_CAP_CELL "sky130_fd_sc_hd__decap_3"
 
 #-------------------------------------------------------------------------
 # ADK_ANTENNA_CELL
@@ -113,8 +120,8 @@ set ADK_END_CAP_CELL ""
 # This list has the antenna diode cell used to avoid antenna DRC
 # violations.
 
-set ADK_ANTENNA_CELL ""
-# FIXME
+# source: https://github.com/RTimothyEdwards/open_pdks/blob/master/sky130/openlane/sky130_fd_sc_hd/config.tcl#L55
+set ADK_ANTENNA_CELL "sky130_fd_sc_hd__diode_2"
 
 #-------------------------------------------------------------------------
 # ADK_LVS_EXCLUDE_CELL_LIST (OPTIONAL)
@@ -131,8 +138,9 @@ set ADK_ANTENNA_CELL ""
 # difficult to deal with.
 
 set ADK_LVS_EXCLUDE_CELL_LIST \
-  "sky130_fd_sc_hd__fill_*"
-# FIXME
+  "sky130_fd_sc_hd__fill_* \
+   sky130_fd_sc_hd__decap_* \
+   sky130_fd_sc_hd__tapvpwrvgnd_1"
 
 #-------------------------------------------------------------------------
 # ADK_VIRTUOSO_EXCLUDE_CELL_LIST (OPTIONAL)
@@ -148,8 +156,23 @@ set ADK_LVS_EXCLUDE_CELL_LIST \
 # simulations will just run more slowly.
 
 set ADK_VIRTUOSO_EXCLUDE_CELL_LIST \
-  "sky130_fd_sc_hd__fill_*"
-# FIXME
+  "sky130_fd_sc_hd__fill_* \
+   sky130_fd_sc_hd__decap_* \
+   sky130_fd_sc_hd__tapvpwrvgnd_1"
+
+#-------------------------------------------------------------------------
+# ADK_BUF_CELL_LIST (OPTIONAL)
+#-------------------------------------------------------------------------
+# For ECOs, we specify what buffer cells can be used in order to resolve
+# timing violations.
+set ADK_BUF_CELL_LIST \
+  "sky130_fd_sc_hd__buf_1 \
+   sky130_fd_sc_hd__buf_2 \
+   sky130_fd_sc_hd__buf_4 \
+   sky130_fd_sc_hd__buf_6 \
+   sky130_fd_sc_hd__buf_8 \
+   sky130_fd_sc_hd__buf_12 \
+   sky130_fd_sc_hd__buf_16"
 
 #-------------------------------------------------------------------------
 # Support for open-source tools
@@ -157,7 +180,6 @@ set ADK_VIRTUOSO_EXCLUDE_CELL_LIST \
 # Open-source tools tend to require more detailed variables than
 # commercial tools do. In this section we define extra variables for them.
 
-# FIXME
 set ADK_TIE_HI_CELL "sky130_fd_sc_hd__conb_1"
 set ADK_TIE_LO_CELL "sky130_fd_sc_hd__conb_1"
 set ADK_TIE_HI_PORT "HI"
@@ -166,6 +188,3 @@ set ADK_TIE_LO_PORT "LO"
 set ADK_MIN_BUF_CELL   "sky130_fd_sc_hd__buf_1"
 set ADK_MIN_BUF_PORT_I "A"
 set ADK_MIN_BUF_PORT_O "X"
-
-
-
