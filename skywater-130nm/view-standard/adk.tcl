@@ -53,7 +53,7 @@ set ADK_POWER_MESH_TOP_LAYER 6
 # are being driven by this kind of cell. It should usually be some kind
 # of simple inverter.
 
-set ADK_DRIVING_CELL "sky130_fd_sc_hd__inv_2"
+set ADK_DRIVING_CELL "sky130_fd_sc_hd__inv_8"
 
 #-------------------------------------------------------------------------
 # ADK_TYPICAL_ON_CHIP_LOAD
@@ -66,7 +66,7 @@ set ADK_DRIVING_CELL "sky130_fd_sc_hd__inv_2"
 # The stdcell lib shows about 9fF for an inverter x4, so about 9fF is
 # reasonable.
 
-set ADK_TYPICAL_ON_CHIP_LOAD 0.009
+set ADK_TYPICAL_ON_CHIP_LOAD 0.017
 
 #-------------------------------------------------------------------------
 # ADK_FILLER_CELLS
