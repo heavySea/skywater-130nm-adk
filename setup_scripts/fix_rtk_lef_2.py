@@ -13,14 +13,14 @@ print ("Fixing tech LEF file (part 2). Read the docs about this step to check if
 
 #insert_text="LAYER licon \n  TYPE CUT ;\nEND licon"
 
-insert_text	= "### https://github.com/google/skywater-pdk-libs-sky130_fd_sc_hd/pull/3/files\n"
-			+ "LAYER poly\n    TYPE MASTERSLICE ;\nEND poly"
-			+ "LAYER licon1\n    TYPE CUT ;\n"
-			+ "    WIDTH 0.17 ;                # Licon 1\n"
-			+ "    SPACING 0.17 ;              # Licon 2\n"
-			+ "    ENCLOSURE BELOW 0 0 ;       # Licon 4\n"
-			+ "    ENCLOSURE ABOVE 0.08 0.08 ; # Poly / Met1 4 / Met1 5\n"
-			+ "END licon1\n###"
+insert_text = """### https://github.com/google/skywater-pdk-libs-sky130_fd_sc_hd/pull/3/files\n
+LAYER poly\n    TYPE MASTERSLICE ;\nEND poly
+LAYER licon1\n    TYPE CUT ;
+    WIDTH 0.17 ;                # Licon 1
+    SPACING 0.17 ;              # Licon 2
+    ENCLOSURE BELOW 0 0 ;       # Licon 4
+    ENCLOSURE ABOVE 0.08 0.08 ; # Poly / Met1 4 / Met1 5
+END licon1\n###"""
 
 file_insert_line_at_pattern( 'rtk-tech.lef', 'END pwell', insert_text, replace_line=False)
 
