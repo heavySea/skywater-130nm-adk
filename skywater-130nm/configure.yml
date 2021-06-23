@@ -19,9 +19,13 @@ outputs:
 #-------------------------------------------------------------------------
 
 commands:
-  # Set up the outputs
+  # When used to harden macros that are to be used with openlane, the 
+  # the maximum metal routing layer must be changed
+  - if [[ x{adk_view} == xview-openlane ]]; then
+      python3 ./change_max_routing_layer.py;
+    fi
   - mkdir -p outputs && cd outputs
-  - ln -sf ../{adk_view} adk
+  - ln -sf ../view-standard adk
 
 #-------------------------------------------------------------------------
 # Parameters
